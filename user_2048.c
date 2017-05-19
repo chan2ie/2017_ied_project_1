@@ -81,12 +81,48 @@ void draw_board(int tot, int command){
 }
 
 int make_two_or_four(){
+
 	/* user code */
 
 	/* return 2 or 4 that makes in this times */
 
 	/* if can not make two or four, then return 0 */
-	return 0;	
+	
+	int b1, b2;
+	int i, j, sum = 0;
+	
+	for(i = 0; i < 4; i++){
+		for(j = 0; j < 4; j++){
+			if (b[i][j] != 0){
+				sum += 1;
+			}
+		}
+	}
+
+	srand(time(NULL));
+
+	b1 = rand() % 4;
+	b2 = rand() % 4;
+
+	if (sum == 16){
+		return 0;
+	}
+
+	if (b[b2][b2] == 0){
+	
+		if(rand() % 3 == 0){
+			b[b1][b2] = 4;
+
+			return 4;
+		}
+		
+		else {
+			b[b1][b2] = 2;
+
+			return 2;
+		}
+	}
+
 }
 
 
