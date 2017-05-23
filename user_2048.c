@@ -48,7 +48,15 @@ int is_game_over(){
 	/* user code */
 
 	/* if game over return 0, else then return 1 */
-	return 0;
+
+	int r;
+
+	r = make_two_or_four();
+
+	if(r == 0){
+		return 1;
+	}
+	else return 0;
 }
 
 void draw_board(int tot, int command){
