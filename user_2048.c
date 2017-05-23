@@ -21,6 +21,20 @@ void init(){
 
 void rotate(int b[4][4]){
 	/* user code */ 
+	int temp[4][4];
+	int i,j;
+	
+	for(i = 0; i < 4; i++){
+		for(j = 0; j < 4; j++){
+			temp[i][j] = b[i][j];
+		}
+	}
+
+	for(i = 0; i < 4; i++){
+		for(j = 0; j < 4; j++){
+			b[j][3 - i] = temp[i][j];
+		}
+	}
 }
 
 int set_board(int dir, int b[4][4]){
@@ -89,7 +103,7 @@ int make_two_or_four(){
 	/* if can not make two or four, then return 0 */
 	
 	int b1, b2;
-	int i, j, sum = 0;
+	int i, j, r, sum = 0;
 	
 	for(i = 0; i < 4; i++){
 		for(j = 0; j < 4; j++){
@@ -121,6 +135,10 @@ int make_two_or_four(){
 
 			return 2;
 		}
+	}
+	else{
+		r = make_two_or_four();
+		return r;
 	}
 
 }
