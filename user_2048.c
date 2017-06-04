@@ -168,32 +168,25 @@ int make_two_or_four(){
 
 	srand(time(NULL));
 
-	b1 = rand() % 4;
-	b2 = rand() % 4;
-
 	if (sum == 16){
 		return 0;
 	}
 
-	if (b[b1][b2] == 0){
+	do{
+		b1 = rand() % 4;
+		b2 = rand() % 4;	
+	}while(b[b1][b2] != 0);
 	
-		if(rand() % 3 == 0){
-			b[b1][b2] = 4;
+	if(rand() % 3 == 0){
+		b[b1][b2] = 4;
 
-			return 4;
-		}
-		
-		else {
-			b[b1][b2] = 2;
-
-			return 2;
-		}
+		return 4;
 	}
-	else{
-		r = make_two_or_four();
-		return r;
-	}
+	else {
+		b[b1][b2] = 2;
 
+		return 2;
+	}
 }
 
 
@@ -260,10 +253,13 @@ int main() {
 	srand(time(NULL));
 
 	int tot = 0;
-
 	/* make init board */
 	/* user code */
+	 int i;
 
+	 for(i = 0; i < 2; i++){
+	 	make_two_or_four();
+	 }
 	draw_board(tot, -1);
 
 	
@@ -274,6 +270,7 @@ int main() {
 			if( set_board(command, b) ){
 
 				/* user code */
+				make_two_or_four();
 
 				draw_board(tot, command);
 			}
