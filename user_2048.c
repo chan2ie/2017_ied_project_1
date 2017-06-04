@@ -38,10 +38,55 @@ void rotate(int b[4][4]){
 }
 
 int set_board(int dir, int b[4][4]){
-
 	/* user code init */
 
-	return 1;
+	int i, j, k;
+	int temp[4][4];
+
+	for(i = 0; i < 4; i++){
+		for(j = 0; j < 4; j++){
+			temp[i][j] = b[i][j];
+		}
+	}
+
+	for(i = 0; i < dir; i++){
+		rotate(b);
+	}
+
+	for(i = 0; i <= 3; i++){
+		for(j = 3; j > 0; j--){
+			if (b[i][j] == b[i][j-1]){
+				b[i][j] += b[i][j-1];
+				for(k = j - 1; k > 0; k--){
+					b[i][k] = b[i][k - 1];
+				}	
+				b[i][0] = 0;
+				if(j == 3){
+					if (b[i][2] == 0){}
+					else j--;
+				}
+			}
+			else if (b[i][j] == 0){
+				for(k = j; k > 0; k--){
+					b[i][k] = b[i][k - 1];
+			}
+				b[i][0] = 0;
+			}
+		}
+	}
+
+	for(i = 0; i < 4 - dir; i++){
+		rotate(b);
+	}
+
+	for(i = 0; i < 4; i++){
+		for(j = 0; j < 4; j++){
+			if(temp[i][j] != b[i][j]){
+				return 1;
+			}
+		}
+	}
+	return 0;
 }
 
 int is_game_over(){
@@ -130,7 +175,7 @@ int make_two_or_four(){
 		return 0;
 	}
 
-	if (b[b2][b2] == 0){
+	if (b[b1][b2] == 0){
 	
 		if(rand() % 3 == 0){
 			b[b1][b2] = 4;
