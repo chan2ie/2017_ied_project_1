@@ -42,6 +42,7 @@ int set_board(int dir, int b[4][4]){
 
 	int i, j, k;
 	int temp[4][4];
+	int count = 0;
 
 	for(i = 0; i < 4; i++){
 		for(j = 0; j < 4; j++){
@@ -54,19 +55,13 @@ int set_board(int dir, int b[4][4]){
 	}
 
 	for(i = 0; i <= 3; i++){
-		for(j = 3; j > 0; j--){
-			if (b[i][j] == b[i][j-1]){
-				b[i][j] += b[i][j-1];
-				for(k = j - 1; k > 0; k--){
-					b[i][k] = b[i][k - 1];
-				}	
-				b[i][0] = 0;
-				if(j == 3){
-					if (b[i][2] == 0){}
-					else j--;
-				}
+		for(j = 3; j > 0;){
+			count++;
+			if (count > 4) {
+				j--;
+				count = 0;
 			}
-			else if (b[i][j] == 0){
+			if (b[i][j] == 0){
 				for(k = j; k > 0; k--){
 					b[i][k] = b[i][k - 1];
 			}
@@ -74,6 +69,18 @@ int set_board(int dir, int b[4][4]){
 			}
 		}
 	}
+	for(i = 0; i <= 3; i++){
+		for(j = 3; j > 0; j--){
+				if (b[i][j] == b[i][j-1]){
+					b[i][j] += b[i][j-1];
+					for(k = j - 1; k > 0; k--){
+						b[i][k] = b[i][k - 1];
+					}	
+				b[i][0] = 0;
+				}
+			}
+		}
+
 
 	for(i = 0; i < 4 - dir; i++){
 		rotate(b);
@@ -93,19 +100,24 @@ int is_game_over(){
 	/* user code */
 
 	/* if game over return 0, else then return 1 */
+	
+	int i, j;
+	int temp[4][4];
 
-	int r;
-
-	r = make_two_or_four();
-
-	if(r == 0){
+	for(i = 0; i < 4; i++){
+		for(j = 0; j < 4; j++){
+			temp[i][j] = b[i][j];
+		}
+	}
+	if(set_board(0,temp) + set_board(1,temp) + set_board(2,temp) + set_board(3,temp) == 0){
 		return 1;
 	}
 	else return 0;
+
 }
 
 void draw_board(int tot, int command){
-	int i, j, k, c[8][8], score;
+	int i, j, k, c[8][8], score, sum = 0;
 	/* console clear */
 	system("clear");
 
@@ -113,8 +125,21 @@ void draw_board(int tot, int command){
 	/* user code */
 	
 	/* calculate score & check sum of all block equasls variable tot */
-
-
+	//calculate score
+	
+	for(i = 0; i < 4; i++){
+		for(j = 0; j < 4; j++){
+			if(b[i][j] > score){
+				score = b[i][j];
+			}
+		}
+	}
+	//check sum & tot
+	for(i = 0; i < 4; i++){
+		for(j = 0; j < 4; j++){
+			sum += b[i][j];
+		}
+	}
 
 	printf("    Score : %d\n", score);
 	fprintf(fp, "%d %d\n", score, command);
@@ -145,6 +170,10 @@ void draw_board(int tot, int command){
 		puts("");
 		puts("");
 	}
+	if(sum != tot){
+	system("clear");
+	printf("ERROR!\n");
+	}
 }
 
 int make_two_or_four(){
@@ -156,7 +185,7 @@ int make_two_or_four(){
 	/* if can not make two or four, then return 0 */
 	
 	int b1, b2;
-	int i, j, r, sum = 0;
+	int i, j, sum = 0;
 	
 	for(i = 0; i < 4; i++){
 		for(j = 0; j < 4; j++){
@@ -255,10 +284,10 @@ int main() {
 	int tot = 0;
 	/* make init board */
 	/* user code */
-	 int i;
+	 int i,j;
 
 	 for(i = 0; i < 2; i++){
-	 	make_two_or_four();
+	 	tot += make_two_or_four();
 	 }
 	draw_board(tot, -1);
 
@@ -271,11 +300,17 @@ int main() {
 
 				/* user code */
 				make_two_or_four();
+					
+				for(tot = 0, i = 0; i < 4; i++){
+					for(j = 0; j < 4; j++){
+						tot += b[i][j];
+					}
+				}
 
 				draw_board(tot, command);
 			}
 		}
-
+		game_over = is_game_over();
 	} while (!game_over);
 
 	system("clear");
